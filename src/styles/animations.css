@@ -1,0 +1,83 @@
+/*
+ * GPU-composited keyframe animations (transform & opacity only).
+ * Avoids animating layout or paint-triggering properties like background-position.
+ */
+
+@keyframes gridDrift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(56px, 56px, 0);
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0px, 0);
+  }
+  50% {
+    transform: translate3d(0, -7px, 0);
+  }
+}
+
+@keyframes pulseSoft {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes scrollBounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate3d(0, 6px, 0);
+    opacity: 1;
+  }
+}
+
+/* Static crisp editorial gradient text (no 60Hz background-position repaint) */
+.animate-gradient-text {
+  background-size: 100% 100%;
+}
+
+.animate-grid-drift {
+  animation: gridDrift 26s linear infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 6.5s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatSlow 7.8s ease-in-out 1.4s infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulseSoft 4.2s ease-in-out infinite;
+}
+
+.animate-scroll-bounce {
+  animation: scrollBounce 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

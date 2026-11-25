@@ -1,0 +1,15 @@
+# Dependencies & build output
+node_modules
+dist
+
+# Secrets: never commit these (App Passwords, API keys)
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+*.log
+
+# Local source resume copies at repo root (deployed copy lives in public/resume/Ritik_Sahoo.pdf)
+/Ritik_Sahoo*.pdf

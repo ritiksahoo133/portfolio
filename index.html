@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ritik Kumar Sahoo | Software Developer | AI &amp; Full-Stack Engineer</title>
+    <meta
+      name="description"
+      content="Portfolio of Ritik Kumar Sahoo — Software Developer specializing in AI-powered applications, LLMs, RAG, full-stack engineering, scalable backend systems, and enterprise ERP integrations."
+    />
+    <meta name="author" content="Ritik Kumar Sahoo" />
+    <meta
+      name="keywords"
+      content="Ritik Kumar Sahoo, Software Developer, Full-Stack Engineer, Backend Developer, AI, ML, LLM, RAG, Django, React, Node.js, ERP, AWS, Bhubaneswar"
+    />
+    <meta name="theme-color" content="#080D18" />
+
+    <!-- Synchronous theme boot script to prevent flash of wrong theme (FOUC) -->
+    <script>
+      (function () {
+        try {
+          var key = 'portfolio-theme-preference';
+          var stored = window.localStorage ? window.localStorage.getItem(key) : null;
+          var pref =
+            stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+          var systemDark =
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var resolved = pref === 'system' ? (systemDark ? 'dark' : 'light') : pref;
+          var root = document.documentElement;
+          root.setAttribute('data-theme', resolved);
+          root.classList.toggle('dark', resolved === 'dark');
+          root.classList.toggle('light', resolved === 'light');
+          root.style.colorScheme = resolved;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', resolved === 'dark' ? '#080D18' : '#F8FAFC');
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ritik Kumar Sahoo | Software Developer | AI & Full-Stack Engineer" />
+    <meta
+      property="og:description"
+      content="Software Developer focused on building AI-powered applications, scalable backend systems, and intelligent enterprise ERP solutions."
+    />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ritik Kumar Sahoo | Software Developer | AI & Full-Stack Engineer" />
+    <meta
+      name="twitter:description"
+      content="Full-Stack Developer, AI/ML & RAG Builder, Backend & Enterprise ERP Engineer."
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Optimized Google Fonts: Space Grotesk (editorial display), Inter (body), JetBrains Mono (technical accents) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="antialiased selection:bg-emerald-500/25 selection:text-emerald-900 dark:selection:bg-emerald-500/30 dark:selection:text-emerald-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

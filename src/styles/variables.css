@@ -1,0 +1,21 @@
+:root {
+  /* Fonts */
+  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Fluid responsive layout tokens */
+  --nav-height: 64px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --nav-height: 72px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --nav-height: 76px;
+  }
+}

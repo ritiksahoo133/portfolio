@@ -1,0 +1,163 @@
+/*
+ * Lightweight, GPU-friendly CSS visual effects — Dark & Light theme-aware,
+ * zero continuous idle paint loops, zero Houdini @property style-recalc storms,
+ * and full prefers-reduced-motion compliance.
+ */
+
+/* 1. Subtle architectural micro-texture (zero SVG feTurbulence filter cost) */
+.noise-overlay {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.08) 0.5px, transparent 0.5px);
+  background-size: 14px 14px;
+  opacity: var(--noise-opacity, 0.028);
+  pointer-events: none;
+}
+
+/* 2. Layered editorial Hero gradient mesh (static GPU layer — zero continuous repaint) */
+.hero-mesh {
+  background:
+    radial-gradient(ellipse 52% 44% at 18% 26%, var(--mesh-emerald) 0%, transparent 72%),
+    radial-gradient(ellipse 48% 42% at 84% 22%, var(--mesh-cyan) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 36% at 54% 78%, var(--mesh-emerald-soft) 0%, transparent 74%);
+}
+
+/* 3. Illuminated emerald-to-cyan perimeter hairline border (GPU opacity hover only, 0 idle CPU) */
+.conic-border {
+  position: relative;
+}
+
+.conic-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--conic-emerald) 0%,
+    transparent 36%,
+    transparent 64%,
+    var(--conic-cyan) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.42;
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .conic-border:hover::before {
+    opacity: 0.92;
+  }
+}
+
+/* 4. Elevated featured surface (crisp translucent layer without heavy per-card backdrop-filter blur) */
+.glass-featured {
+  background: var(--glass-featured-bg);
+}
+
+/* 5. Specular 3D glare overlay driven by rAF-throttled pointer CSS vars */
+.tilt-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 240ms ease;
+  background: radial-gradient(
+    360px circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    var(--tilt-glare-color),
+    transparent 62%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tilt-card-host:hover .tilt-glare {
+    opacity: 1;
+  }
+}
+
+@keyframes signalFlow {
+  0% {
+    stroke-dashoffset: 30;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 6. Animated architectural dashed SVG signal connector (strictly paused when host section is offscreen) */
+.svg-signal-flow {
+  stroke-dasharray: 5 5;
+  animation: signalFlow 1.8s linear infinite;
+}
+
+[data-offscreen='true'] .svg-signal-flow {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svg-signal-flow {
+    animation: none !important;
+  }
+}
+
+/* 7. Editorial gradient accent text (static crisp gradient — zero 60Hz background-position repaint) */
+.about-shimmer-text {
+  background-size: 100% 100%;
+}
+
+/* 8. Static ambient radial orb container (zero idle animation loop) */
+.about-ambient-orb {
+  contain: strict;
+}
+
+/* 9. Subtle architectural top hairline sweep on card hover (GPU transform + opacity only) */
+.card-top-accent {
+  position: relative;
+}
+
+.card-top-accent::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1.5px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--conic-emerald),
+    var(--conic-cyan),
+    transparent
+  );
+  opacity: 0;
+  transform: scaleX(0.35);
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-top-accent:hover::after {
+    opacity: 0.9;
+    transform: scaleX(1);
+  }
+}
+
+/* 10. Editorial chapter watermark numeral */
+.chapter-watermark {
+  font-family: var(--font-display);
+  color: var(--watermark-color);
+  user-select: none;
+  pointer-events: none;
+}
