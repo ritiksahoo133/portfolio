@@ -99,12 +99,33 @@
   animation: signalFlow 1.8s linear infinite;
 }
 
-[data-offscreen='true'] .svg-signal-flow {
+@keyframes pipelineDash {
+  from {
+    transform: translate3d(-8px, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Flowing dash between pipeline steps. Transform-only so it stays smooth on mobile. */
+.pipeline-signal-dash {
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor 0 4px,
+    transparent 4px 8px
+  );
+  animation: pipelineDash 0.7s linear infinite;
+}
+
+[data-offscreen='true'] .svg-signal-flow,
+[data-offscreen='true'] .pipeline-signal-dash {
   animation-play-state: paused !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .svg-signal-flow {
+  .svg-signal-flow,
+  .pipeline-signal-dash {
     animation: none !important;
   }
 }

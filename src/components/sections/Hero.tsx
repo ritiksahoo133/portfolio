@@ -324,39 +324,48 @@ export const Hero = memo(function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={reducedMotion ? undefined : { opacity: 0, y: -4 }}
                     transition={{ duration: 0.2, ease: EASE_EDITORIAL }}
-                    className="flex flex-wrap items-center justify-between gap-1 font-mono-tech text-[10px] sm:flex-nowrap"
+                    className="w-full overflow-x-auto font-mono-tech text-[8px] [scrollbar-width:none] min-[400px]:text-[10px] [&::-webkit-scrollbar]:hidden"
                   >
-                    {currentLayer.pipeline.map((node, idx) => (
-                      <div key={node} className="flex items-center gap-1">
-                        <span className="whitespace-nowrap rounded-md border border-emerald-600/25 bg-emerald-500/10 px-1.5 py-0.5 font-medium text-emerald-800 dark:border-emerald-500/25 dark:text-emerald-200">
-                          {node}
-                        </span>
-                        {idx < currentLayer.pipeline.length - 1 && (
-                          <svg
-                            width="14"
-                            height="10"
-                            viewBox="0 0 14 10"
-                            fill="none"
-                            aria-hidden="true"
-                            className="shrink-0 text-emerald-600/70 dark:text-emerald-400/75"
-                          >
-                            <path
-                              d="M1 5H11"
-                              stroke="currentColor"
-                              strokeWidth="1.25"
-                              className="svg-signal-flow"
-                            />
-                            <path
-                              d="M9 2.2L12 5L9 7.8"
-                              stroke="currentColor"
-                              strokeWidth="1.25"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    ))}
+                    <div className="inline-flex min-w-full flex-nowrap items-center">
+                    {currentLayer.pipeline.map((node, idx) => {
+                      const isLast = idx === currentLayer.pipeline.length - 1;
+                      return (
+                        <div
+                          key={node}
+                          className={`flex items-center ${isLast ? 'shrink-0' : 'grow shrink-0'}`}
+                        >
+                          <span className="shrink-0 whitespace-nowrap rounded-md border border-emerald-600/25 bg-emerald-500/10 px-1 py-0.5 font-medium text-emerald-800 min-[400px]:px-1.5 dark:border-emerald-500/25 dark:text-emerald-200">
+                            {node}
+                          </span>
+                          {!isLast && (
+                            <span
+                              aria-hidden="true"
+                              className="mx-0.5 flex min-w-[14px] flex-1 items-center text-emerald-600/80 min-[400px]:mx-1 min-[400px]:min-w-[18px] dark:text-emerald-400/80"
+                            >
+                              <span className="relative h-[2px] flex-1 overflow-hidden rounded-full">
+                                <span className="pipeline-signal-dash absolute inset-y-0 left-0 w-[200%]" />
+                              </span>
+                              <svg
+                                width="8"
+                                height="8"
+                                viewBox="0 0 8 8"
+                                fill="none"
+                                className="ml-px shrink-0"
+                              >
+                                <path
+                                  d="M1.2 1.2L5.6 4L1.2 6.8"
+                                  stroke="currentColor"
+                                  strokeWidth="1.25"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                    </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
