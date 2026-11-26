@@ -99,11 +99,13 @@ export const Hero = memo(function Hero() {
       {/* Subtle editorial film-grain noise overlay */}
       <div aria-hidden="true" className="noise-overlay absolute inset-0" />
 
-      {/* Layered cinematic gradient mesh (pauses offscreen) */}
-      <div
-        aria-hidden="true"
-        className="hero-mesh pointer-events-none absolute -inset-12 will-change-transform"
-      />
+      {/* Slow emerald/cyan aurora and a light sweep. Pauses when the hero leaves the screen. */}
+      <div aria-hidden="true" className="hero-aurora pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="hero-orb hero-orb-emerald" />
+        <div className="hero-orb hero-orb-cyan" />
+        <div className="hero-orb hero-orb-soft" />
+        <div className="hero-sheen" />
+      </div>
 
       {/* Slowly drifting architectural grid (GPU translate3d layer, paused offscreen) */}
       <div

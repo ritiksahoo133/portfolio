@@ -194,7 +194,9 @@
 [data-offscreen='true'] .animate-float-slow,
 [data-offscreen='true'] .animate-float-delayed,
 [data-offscreen='true'] .animate-pulse-soft,
-[data-offscreen='true'] .animate-scroll-bounce {
+[data-offscreen='true'] .animate-scroll-bounce,
+[data-offscreen='true'] .hero-orb,
+[data-offscreen='true'] .hero-sheen {
   animation-play-state: paused !important;
 }
 

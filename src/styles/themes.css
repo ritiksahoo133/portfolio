@@ -47,6 +47,7 @@
   --mesh-emerald: rgba(16, 185, 129, 0.15);
   --mesh-cyan: rgba(34, 211, 238, 0.12);
   --mesh-emerald-soft: rgba(16, 185, 129, 0.07);
+  --hero-sheen: rgba(226, 252, 239, 0.07);
   --conic-emerald: rgba(16, 185, 129, 0.85);
   --conic-cyan: rgba(34, 211, 238, 0.85);
   --glass-featured-bg: rgba(13, 21, 36, 0.8);
@@ -115,6 +116,7 @@
   --mesh-emerald: rgba(5, 150, 105, 0.11);
   --mesh-cyan: rgba(8, 145, 178, 0.1);
   --mesh-emerald-soft: rgba(5, 150, 105, 0.055);
+  --hero-sheen: rgba(5, 150, 105, 0.09);
   --conic-emerald: rgba(5, 150, 105, 0.65);
   --conic-cyan: rgba(8, 145, 178, 0.65);
   --glass-featured-bg: rgba(255, 255, 255, 0.88);
