@@ -186,12 +186,12 @@ export const Hero = memo(function Hero() {
               ))}
             </motion.div>
 
-            {/* Step 5: Touch-friendly responsive CTAs */}
+            {/* Step 5: Primary action, then a paired secondary row */}
             <motion.div
               initial={reducedMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.42, delay: 0.28, ease: EASE_EDITORIAL }}
-              className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3.5"
+              className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3.5"
             >
               <MagneticButton className="w-full sm:w-auto">
                 <Button href="#projects" variant="primary" size="lg" className="group w-full sm:w-auto">
@@ -200,66 +200,77 @@ export const Hero = memo(function Hero() {
                 </Button>
               </MagneticButton>
 
-              <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:flex sm:items-center sm:gap-3.5">
-                <MagneticButton className="w-full sm:w-auto">
+              <div className="grid grid-cols-2 gap-2.5 sm:flex sm:items-center sm:gap-3.5">
+                <MagneticButton className="w-full min-w-0 sm:w-auto">
                   <Button
                     href={PROFILE.resumeUrl}
                     download={PROFILE.resumeFileName}
                     variant="secondary"
-                    size="lg"
-                    className="group w-full sm:w-auto"
+                    size="md"
+                    className="group w-full sm:min-h-[48px] sm:w-auto sm:px-6 sm:text-base"
                   >
-                    <Download className="h-4 w-4 text-emerald-600 transition-transform duration-200 group-hover:translate-y-0.5 dark:text-emerald-400" />
-                    <span>Download Resume</span>
+                    <Download className="h-4 w-4 shrink-0 text-emerald-600 transition-transform duration-200 group-hover:translate-y-0.5 dark:text-emerald-400" />
+                    <span className="truncate sm:hidden">Resume</span>
+                    <span className="hidden sm:inline">Download Resume</span>
                   </Button>
                 </MagneticButton>
 
                 <Button
                   href="#contact"
                   variant="ghost"
-                  size="lg"
-                  className="group w-full sm:w-auto"
+                  size="md"
+                  className="group w-full sm:min-h-[48px] sm:w-auto sm:px-6 sm:text-base"
                 >
-                  <Mail className="h-4 w-4 text-cyan-600 transition-transform duration-200 group-hover:-translate-y-0.5 dark:text-cyan-400" />
-                  <span>Contact Me</span>
+                  <Mail className="h-4 w-4 shrink-0 text-cyan-600 transition-transform duration-200 group-hover:-translate-y-0.5 dark:text-cyan-400" />
+                  <span>Contact</span>
+                  <span className="hidden sm:inline"> Me</span>
                 </Button>
               </div>
             </motion.div>
 
-            {/* Social links */}
+            {/* Social links: equal touch targets on mobile, inline text row on desktop */}
             <motion.div
               initial={reducedMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.38, delay: 0.36, ease: EASE_EDITORIAL }}
-              className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--border)] pt-5 sm:mt-7 sm:gap-x-5"
+              className="mt-4 border-t border-[var(--border)] pt-4 sm:mt-7 sm:pt-5"
             >
-              <a
-                href={PROFILE.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-underline group inline-flex min-h-[40px] items-center gap-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-emerald-700 dark:hover:text-emerald-300"
-              >
-                <Linkedin className="h-4 w-4 text-[var(--text-muted)] transition-colors group-hover:text-emerald-600 dark:group-hover:text-emerald-400" />
-                <span>LinkedIn</span>
-              </a>
-              <span className="text-[var(--border)]" aria-hidden="true">
-                /
-              </span>
-              <a
-                href={PROFILE.socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-underline group inline-flex min-h-[40px] items-center gap-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-emerald-700 dark:hover:text-emerald-300"
-              >
-                <Github className="h-4 w-4 text-[var(--text-muted)] transition-colors group-hover:text-emerald-600 dark:group-hover:text-emerald-400" />
-                <span>GitHub</span>
-              </a>
-              <span className="hidden text-[var(--border)] sm:inline" aria-hidden="true">
-                /
-              </span>
+              <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2">
+                <a
+                  href={PROFILE.socials.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex min-h-[42px] items-center justify-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-2 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--border-accent)] hover:text-emerald-700 sm:min-h-[40px] sm:justify-start sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:text-sm dark:hover:text-emerald-300"
+                >
+                  <Linkedin className="h-4 w-4 shrink-0 text-[var(--text-muted)] transition-colors group-hover:text-emerald-600 dark:group-hover:text-emerald-400" />
+                  <span>LinkedIn</span>
+                </a>
+                <a
+                  href={PROFILE.socials.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex min-h-[42px] items-center justify-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-2 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--border-accent)] hover:text-emerald-700 sm:min-h-[40px] sm:justify-start sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:text-sm dark:hover:text-emerald-300"
+                >
+                  <Github className="h-4 w-4 shrink-0 text-[var(--text-muted)] transition-colors group-hover:text-emerald-600 dark:group-hover:text-emerald-400" />
+                  <span>GitHub</span>
+                </a>
+                <a
+                  href={`mailto:${PROFILE.email}`}
+                  className="group inline-flex min-h-[42px] items-center justify-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-2 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--border-accent)] hover:text-cyan-700 sm:hidden dark:hover:text-cyan-300"
+                >
+                  <Mail className="h-4 w-4 shrink-0 text-cyan-600 dark:text-cyan-400" />
+                  <span>Email</span>
+                </a>
+                <a
+                  href={`mailto:${PROFILE.email}`}
+                  className="link-underline hidden min-h-[40px] items-center font-mono-tech text-sm text-[var(--text-secondary)] transition-colors hover:text-cyan-700 sm:inline-flex dark:hover:text-cyan-300"
+                >
+                  {PROFILE.email}
+                </a>
+              </div>
               <a
                 href={`mailto:${PROFILE.email}`}
-                className="link-underline inline-flex min-h-[40px] items-center break-all font-mono-tech text-xs text-[var(--text-secondary)] transition-colors hover:text-cyan-700 sm:break-normal sm:text-sm dark:hover:text-cyan-300"
+                className="mt-2 block truncate text-center font-mono-tech text-[11px] text-[var(--text-muted)] sm:hidden"
               >
                 {PROFILE.email}
               </a>
