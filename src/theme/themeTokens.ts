@@ -16,9 +16,11 @@ export interface ThemeTokenSet {
   canvas: {
     primaryRgb: string;
     secondaryRgb: string;
+    pulseRgb: string;
     nodeAlphaMin: number;
     nodeAlphaRange: number;
     lineMaxAlpha: number;
+    pointerLineAlpha: number;
   };
 }
 
@@ -39,9 +41,11 @@ export const THEME_TOKENS: Record<ResolvedTheme, ThemeTokenSet> = {
     canvas: {
       primaryRgb: '16, 185, 129',
       secondaryRgb: '34, 211, 238',
-      nodeAlphaMin: 0.16,
-      nodeAlphaRange: 0.28,
-      lineMaxAlpha: 0.08,
+      pulseRgb: '167, 243, 208',
+      nodeAlphaMin: 0.22,
+      nodeAlphaRange: 0.36,
+      lineMaxAlpha: 0.13,
+      pointerLineAlpha: 0.28,
     },
   },
   light: {
@@ -60,9 +64,11 @@ export const THEME_TOKENS: Record<ResolvedTheme, ThemeTokenSet> = {
     canvas: {
       primaryRgb: '5, 150, 105',
       secondaryRgb: '8, 145, 178',
-      nodeAlphaMin: 0.14,
-      nodeAlphaRange: 0.2,
-      lineMaxAlpha: 0.09,
+      pulseRgb: '16, 185, 129',
+      nodeAlphaMin: 0.18,
+      nodeAlphaRange: 0.26,
+      lineMaxAlpha: 0.12,
+      pointerLineAlpha: 0.24,
     },
   },
 };

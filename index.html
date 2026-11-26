@@ -57,13 +57,21 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Optimized Google Fonts: Space Grotesk (editorial display), Inter (body), JetBrains Mono (technical accents) -->
+    <!-- Non-render-blocking Google Fonts: Space Grotesk (editorial display), Inter (body), JetBrains Mono (technical accents) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body class="antialiased selection:bg-emerald-500/25 selection:text-emerald-900 dark:selection:bg-emerald-500/30 dark:selection:text-emerald-200">
     <div id="root"></div>

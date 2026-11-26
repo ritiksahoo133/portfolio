@@ -18,6 +18,7 @@ export function SpotlightCard({
 }: SpotlightCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const rectRef = useRef<DOMRect | null>(null);
+  const rectScrollYRef = useRef<number>(0);
   const rafRef = useRef<number>(0);
   const pointerRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const finePointer = useFinePointer();
@@ -33,6 +34,7 @@ export function SpotlightCard({
   const handleMouseEnter = () => {
     if (!interactive || !cardRef.current) return;
     rectRef.current = cardRef.current.getBoundingClientRect();
+    rectScrollYRef.current = window.scrollY;
   };
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
@@ -45,7 +47,11 @@ export function SpotlightCard({
       rafRef.current = 0;
       const el = cardRef.current;
       if (!el) return;
-      const rect = rectRef.current ?? el.getBoundingClientRect();
+      if (!rectRef.current || rectScrollYRef.current !== window.scrollY) {
+        rectRef.current = el.getBoundingClientRect();
+        rectScrollYRef.current = window.scrollY;
+      }
+      const rect = rectRef.current;
       el.style.setProperty('--spot-x', `${pointerRef.current.x - rect.left}px`);
       el.style.setProperty('--spot-y', `${pointerRef.current.y - rect.top}px`);
     });

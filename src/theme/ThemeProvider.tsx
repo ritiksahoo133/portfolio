@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
@@ -51,8 +52,12 @@ export function ThemeProvider({ children, defaultPreference }: ThemeProviderProp
     [preference, systemTheme]
   );
 
-  // Sync DOM attributes whenever the resolved theme changes
+  const lastAppliedThemeRef = useRef<ResolvedTheme | null>(null);
+
+  // Sync DOM attributes whenever the resolved theme changes (skip duplicate writes after setPreference)
   useEffect(() => {
+    if (lastAppliedThemeRef.current === resolvedTheme) return;
+    lastAppliedThemeRef.current = resolvedTheme;
     applyThemeToDocument(resolvedTheme);
   }, [resolvedTheme]);
 
@@ -87,6 +92,7 @@ export function ThemeProvider({ children, defaultPreference }: ThemeProviderProp
       }
 
       runThemeTransition(() => {
+        lastAppliedThemeRef.current = nextResolved;
         applyThemeToDocument(nextResolved);
         setPreferenceState(next);
       }, origin);

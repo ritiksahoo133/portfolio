@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import {
   ArrowRight,
@@ -27,6 +27,7 @@ import {
   IDENTITY_DOMAINS,
   WORKING_PROCESS,
 } from '../../data/about';
+import { useOffscreenPause } from '../../hooks/useOffscreenPause';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { EASE_EDITORIAL } from '../../lib/motion';
 import { Container } from '../common/Container';
@@ -67,19 +68,7 @@ export const About = memo(function About() {
   const introInView = useInView(introRef, { once: true, margin: '-80px' });
   const reducedMotion = useReducedMotion();
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const inView = Boolean(entries[0]?.isIntersecting);
-        el.setAttribute('data-offscreen', inView ? 'false' : 'true');
-      },
-      { rootMargin: '200px 0px' },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  useOffscreenPause(sectionRef);
 
   const currentDomainIndex = Math.max(
     0,
@@ -105,7 +94,7 @@ export const About = memo(function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative overflow-x-clip border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
+      className="section-divider relative overflow-x-clip border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
     >
       {/* Subtle architectural dot grid + drifting ambient radial orbs (auto-paused when offscreen) */}
       <div
@@ -216,7 +205,7 @@ export const About = memo(function About() {
                           key={domain.id}
                           type="button"
                           onClick={() => handleJumpToDomain(domain.id)}
-                          className={`group inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 font-mono-tech text-[11px] transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
+                          className={`group inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 font-mono-tech text-[11px] transition-[transform,color,background-color,border-color,box-shadow] duration-200 cursor-pointer hover:-translate-y-0.5 ${
                             isCurrent
                               ? 'border-emerald-600/40 bg-emerald-500/12 text-emerald-700 dark:border-emerald-400/45 dark:text-emerald-300'
                               : 'border-[var(--border)] bg-[var(--surface-elevated)]/80 text-[var(--text-secondary)] hover:border-emerald-600/35 hover:text-[var(--text-primary)] dark:bg-slate-950/60 dark:hover:border-emerald-500/35'
@@ -327,7 +316,7 @@ export const About = memo(function About() {
                       type="button"
                       aria-label={`Select ${domain.label}`}
                       onClick={() => setActiveDomainId(domain.id)}
-                      className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      className={`h-1.5 rounded-full transition-[width,background-color] duration-300 cursor-pointer ${
                         i === currentDomainIndex
                           ? 'w-7 bg-gradient-to-r from-emerald-500 to-cyan-500'
                           : 'w-2 bg-[var(--border)] hover:bg-emerald-500/40'
@@ -379,7 +368,7 @@ export const About = memo(function About() {
                         )}
 
                         <span
-                          className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border transition-all duration-300 ${
+                          className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border transition-[transform,color,background-color,border-color,box-shadow] duration-300 ${
                             isActive
                               ? 'scale-105 border-emerald-600/35 bg-emerald-500/15 text-emerald-700 shadow-[0_0_20px_-6px_rgba(16,185,129,0.65)] dark:border-emerald-400/40 dark:text-emerald-300'
                               : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] group-hover:scale-105 group-hover:text-[var(--text-primary)]'
@@ -552,7 +541,7 @@ export const About = memo(function About() {
                       <div className="relative z-10">
                         <div className="mb-5 flex items-center justify-between">
                           <span
-                            className={`flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-300 group-hover:scale-105 group-hover:-rotate-3 ${
+                            className={`flex h-11 w-11 items-center justify-center rounded-xl border transition-[transform,color,background-color,border-color,box-shadow] duration-300 group-hover:scale-105 group-hover:-rotate-3 ${
                               principle.accent === 'cyan'
                                 ? 'border-cyan-600/25 bg-cyan-500/10 text-cyan-700 dark:border-cyan-500/35 dark:text-cyan-400'
                                 : 'border-emerald-600/25 bg-emerald-500/10 text-emerald-700 dark:border-emerald-500/35 dark:text-emerald-400'
@@ -645,7 +634,7 @@ export const About = memo(function About() {
                         type="button"
                         onClick={() => setActiveStepId(item.id)}
                         onMouseEnter={() => setActiveStepId(item.id)}
-                        className={`relative flex h-full w-full flex-col overflow-hidden rounded-xl border p-3.5 text-left transition-all duration-250 cursor-pointer ${
+                        className={`relative flex h-full w-full flex-col overflow-hidden rounded-xl border p-3.5 text-left transition-[transform,color,background-color,border-color,box-shadow] duration-250 cursor-pointer ${
                           isActive
                             ? '-translate-y-1 border-emerald-600/50 bg-[var(--surface)] shadow-[0_14px_30px_-18px_rgba(5,150,105,0.45)] dark:border-emerald-400/50 dark:bg-slate-900/95'
                             : 'border-[var(--border)] bg-[var(--surface-elevated)]/70 hover:-translate-y-0.5 hover:border-slate-300 dark:bg-slate-950/45 dark:hover:border-slate-700'
@@ -660,7 +649,7 @@ export const About = memo(function About() {
                         )}
 
                         <span
-                          className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border font-mono-tech text-xs font-semibold transition-all duration-200 ${
+                          className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border font-mono-tech text-xs font-semibold transition-[transform,color,background-color,border-color,box-shadow] duration-200 ${
                             isActive
                               ? 'scale-105 border-emerald-600/45 bg-emerald-500/18 text-emerald-700 shadow-[0_0_16px_-4px_rgba(16,185,129,0.65)] dark:border-emerald-400/50 dark:text-emerald-300'
                               : isCompleted
@@ -711,11 +700,11 @@ export const About = memo(function About() {
                 {CAREER_HIGHLIGHTS.map((hl, idx) => (
                   <div
                     key={hl.id}
-                    className="group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)]/70 p-4 pl-5 transition-all duration-250 hover:border-[var(--border-accent)] hover:bg-[var(--surface)] dark:bg-slate-950/50 dark:hover:bg-slate-900/75"
+                    className="group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)]/70 p-4 pl-5 transition-[transform,color,background-color,border-color,box-shadow] duration-250 hover:border-[var(--border-accent)] hover:bg-[var(--surface)] dark:bg-slate-950/50 dark:hover:bg-slate-900/75"
                   >
                     <span
                       aria-hidden="true"
-                      className={`absolute inset-y-2.5 left-0 w-[3px] rounded-r-full transition-all duration-250 group-hover:inset-y-1.5 ${
+                      className={`absolute inset-y-2.5 left-0 w-[3px] rounded-r-full transition-[transform,background-color] duration-250 group-hover:scale-y-110 ${
                         idx % 2 === 1
                           ? 'bg-cyan-500/60 group-hover:bg-cyan-400'
                           : 'bg-emerald-500/60 group-hover:bg-emerald-400'
@@ -760,7 +749,7 @@ export const About = memo(function About() {
                 {EXPLORING_TOPICS.map((topic, idx) => (
                   <span
                     key={topic}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface-elevated)]/85 px-2.5 py-1 font-mono-tech text-xs text-[var(--text-secondary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:text-[var(--text-primary)] dark:bg-slate-950/60"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface-elevated)]/85 px-2.5 py-1 font-mono-tech text-xs text-[var(--text-secondary)] transition-[transform,color,background-color,border-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:text-[var(--text-primary)] dark:bg-slate-950/60"
                   >
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${

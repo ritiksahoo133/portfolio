@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -13,6 +13,7 @@ import {
   Server,
 } from 'lucide-react';
 import { PROFILE } from '../../data/profile';
+import { useOffscreenPause } from '../../hooks/useOffscreenPause';
 import { useFinePointer, useReducedMotion } from '../../hooks/useReducedMotion';
 import { EASE_EDITORIAL, badgeItem, staggerContainer } from '../../lib/motion';
 import { Container } from '../common/Container';
@@ -73,22 +74,8 @@ export const Hero = memo(function Hero() {
   const currentLayer =
     SYSTEM_LAYERS.find((layer) => layer.id === activeLayerId) ?? SYSTEM_LAYERS[0];
 
-  // Pause Hero's decorative CSS animations as soon as Hero scrolls out of view
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const inView = Boolean(entries[0]?.isIntersecting);
-        el.setAttribute('data-offscreen', inView ? 'false' : 'true');
-      },
-      { threshold: 0.02 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  // Pause Hero's decorative CSS animations & release GPU layers when Hero leaves the viewport
+  useOffscreenPause(sectionRef);
 
   return (
     <section
@@ -107,26 +94,20 @@ export const Hero = memo(function Hero() {
         <div className="hero-sheen" />
       </div>
 
-      {/* Slowly drifting architectural grid (GPU translate3d layer, paused offscreen) */}
+      {/* Slowly drifting architectural grid + luminous axis beams (GPU translate3d, paused offscreen) */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden [mask-image:radial-gradient(ellipse_78%_68%_at_50%_30%,#000_50%,transparent_100%)]"
       >
         <div className="architectural-grid animate-grid-drift absolute -inset-[56px] will-change-transform" />
+        <div className="hero-grid-beam-h top-[24%] hidden sm:block" />
+        <div className="hero-grid-beam-h hero-grid-beam-h-alt top-[66%] hidden sm:block" />
+        <div className="hero-grid-beam-v left-[28%] hidden md:block" />
+        <div className="hero-grid-beam-v hero-grid-beam-v-alt left-[72%] hidden md:block" />
       </div>
 
       {/* Lightweight desktop-only ambient data-node particles (pauses offscreen) */}
       <AmbientField />
-
-      {/* Soft ambient radial lighting (pure CSS radial gradient, zero GPU blur filter) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-24 mx-auto h-[420px] max-w-5xl opacity-72 sm:-top-28 sm:h-[620px]"
-        style={{
-          background:
-            'radial-gradient(circle at 28% 38%, rgba(16, 185, 129, 0.14) 0%, rgba(16, 185, 129, 0.05) 32%, transparent 62%), radial-gradient(circle at 76% 32%, rgba(8, 145, 178, 0.12) 0%, rgba(8, 145, 178, 0.04) 30%, transparent 58%)',
-        }}
-      />
 
       <Container className="relative z-10">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-10">
@@ -401,7 +382,7 @@ export const Hero = memo(function Hero() {
                       aria-selected={isSelected}
                       onClick={() => setActiveLayerId(layer.id)}
                       onMouseEnter={finePointer ? () => setActiveLayerId(layer.id) : undefined}
-                      className={`relative min-h-[52px] w-full overflow-hidden rounded-xl border p-3.5 text-left transition-all duration-200 sm:p-4 cursor-pointer ${
+                      className={`relative min-h-[52px] w-full overflow-hidden rounded-xl border p-3.5 text-left transition-[color,background-color,border-color,box-shadow] duration-200 sm:p-4 cursor-pointer ${
                         isSelected
                           ? 'border-emerald-600/40 bg-[var(--surface)] shadow-[0_12px_28px_-18px_rgba(5,150,105,0.35)] dark:border-emerald-500/45 dark:bg-slate-900/90 dark:shadow-[0_12px_32px_-18px_rgba(16,185,129,0.45)]'
                           : 'border-[var(--border)] bg-[var(--surface-elevated)]/65 hover:border-slate-300 dark:bg-slate-950/45 dark:hover:border-slate-700'
@@ -466,7 +447,7 @@ export const Hero = memo(function Hero() {
                   return (
                     <span
                       key={tech}
-                      className={`rounded-md border px-2 py-1 font-mono-tech text-[10px] transition-all duration-200 ${
+                      className={`rounded-md border px-2 py-1 font-mono-tech text-[10px] transition-[color,background-color,border-color] duration-200 ${
                         isHighlighted
                           ? 'border-emerald-600/35 bg-emerald-500/12 font-medium text-emerald-800 dark:border-emerald-500/40 dark:text-emerald-200'
                           : 'border-transparent bg-[var(--surface-elevated)] text-[var(--text-muted)] dark:bg-slate-900/90 dark:text-slate-400'

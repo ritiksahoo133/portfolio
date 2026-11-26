@@ -26,7 +26,7 @@ export const SectionRail = memo(function SectionRail() {
             className="group flex items-center gap-2.5 py-1"
           >
             <span
-              className={`font-mono-tech text-[10px] uppercase tracking-[0.16em] transition-all duration-200 ${
+              className={`font-mono-tech text-[10px] uppercase tracking-[0.16em] transition-[transform,opacity,color] duration-200 ${
                 isActive
                   ? 'translate-x-0 text-emerald-700 opacity-100 dark:text-emerald-300'
                   : 'translate-x-1 text-[var(--text-muted)] opacity-0 group-hover:translate-x-0 group-hover:text-[var(--text-primary)] group-hover:opacity-100'
@@ -35,7 +35,7 @@ export const SectionRail = memo(function SectionRail() {
               {item.label}
             </span>
             <span
-              className={`block rounded-full transition-all duration-300 ${
+              className={`block rounded-full transition-[width,height,background-color,box-shadow] duration-300 ${
                 isActive
                   ? 'h-2.5 w-2.5 bg-emerald-600 shadow-[0_0_12px_rgba(5,150,105,0.65)] dark:bg-emerald-400 dark:shadow-[0_0_12px_rgba(16,185,129,0.85)]'
                   : 'h-1.5 w-1.5 bg-slate-300 group-hover:bg-slate-500 dark:bg-slate-700 dark:group-hover:bg-slate-400'

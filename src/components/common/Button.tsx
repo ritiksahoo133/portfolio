@@ -44,7 +44,7 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const classes = `inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 active:scale-[0.98] cursor-pointer ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
+  const classes = `inline-flex items-center justify-center rounded-xl font-medium transition-[transform,color,background-color,border-color,box-shadow] duration-200 active:scale-[0.98] cursor-pointer ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
 
   if ('href' in props && props.href !== undefined) {
     const { href, ...anchorProps } = props;

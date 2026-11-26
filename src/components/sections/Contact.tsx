@@ -19,6 +19,7 @@ import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { MagneticButton } from '../animations/MagneticButton';
 import { Reveal } from '../animations/Reveal';
+import { SectionBackdrop } from '../animations/SectionBackdrop';
 import { SpotlightCard } from '../animations/SpotlightCard';
 
 const RECIPIENT_EMAIL = 'ritiksahoo133@gmail.com';
@@ -129,20 +130,13 @@ export const Contact = memo(function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
+      className="section-divider relative overflow-hidden border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
     >
       {/* Subtle closing noise texture */}
       <div aria-hidden="true" className="noise-overlay absolute inset-0" />
 
-      {/* Subtle closing radial lighting (pure CSS radial gradient, no blur filter) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-80 max-w-5xl opacity-60 sm:h-[440px]"
-        style={{
-          background:
-            'radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.14) 0%, rgba(16, 185, 129, 0.04) 40%, transparent 70%)',
-        }}
-      />
+      {/* Closing convergence aurora & slow orbital beacon rings (auto-paused offscreen) */}
+      <SectionBackdrop variant="beacon" />
 
       <Container className="relative z-10">
         <SectionHeading

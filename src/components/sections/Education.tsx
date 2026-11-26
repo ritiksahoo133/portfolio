@@ -4,6 +4,7 @@ import { EDUCATION } from '../../data/education';
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Reveal } from '../animations/Reveal';
+import { SectionBackdrop } from '../animations/SectionBackdrop';
 import { SpotlightCard } from '../animations/SpotlightCard';
 import { TiltCard } from '../animations/TiltCard';
 
@@ -11,9 +12,10 @@ export const Education = memo(function Education() {
   return (
     <section
       id="education"
-      className="relative border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
+      className="section-divider relative overflow-x-clip border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
     >
-      <Container>
+      <SectionBackdrop variant="horizon" />
+      <Container className="relative z-10">
         <SectionHeading
           chapter="05"
           eyebrow="Education"

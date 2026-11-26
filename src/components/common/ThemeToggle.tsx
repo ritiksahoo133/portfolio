@@ -1,4 +1,4 @@
-import { memo, type MouseEvent } from 'react';
+import { memo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../theme/useTheme';
@@ -26,14 +26,6 @@ const OPTIONS: Array<{
   { value: 'system', label: 'System', title: 'Follow system color scheme', icon: Monitor },
 ];
 
-function getClickOrigin(e: MouseEvent<HTMLButtonElement>) {
-  const rect = e.currentTarget.getBoundingClientRect();
-  return {
-    x: rect.left + rect.width / 2,
-    y: rect.top + rect.height / 2,
-  };
-}
-
 export const ThemeToggle = memo(function ThemeToggle({
   variant = 'segmented',
   className = '',
@@ -48,7 +40,7 @@ export const ThemeToggle = memo(function ThemeToggle({
     return (
       <button
         type="button"
-        onClick={(e) => toggleTheme(getClickOrigin(e))}
+        onClick={() => toggleTheme()}
         aria-label={nextLabel}
         title={nextLabel}
         aria-pressed={!isDark}
@@ -99,7 +91,7 @@ export const ThemeToggle = memo(function ThemeToggle({
             aria-label={option.title}
             title={option.title}
             data-theme-option={option.value}
-            onClick={(e) => setPreference(option.value, getClickOrigin(e))}
+            onClick={() => setPreference(option.value)}
             className={`relative inline-flex items-center justify-center gap-1.5 rounded-lg font-mono-tech text-xs font-medium transition-colors duration-200 cursor-pointer ${
               isFull ? 'min-h-[42px] px-3 py-2' : 'h-8 w-8'
             } ${

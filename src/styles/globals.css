@@ -33,7 +33,31 @@
   /* Skip offscreen style/layout/paint work for below-the-fold sections (massive scroll & theme-switch speedup) */
   section[id]:not(#home) {
     content-visibility: auto;
-    contain-intrinsic-size: auto 760px;
+    contain-intrinsic-size: auto 900px;
+  }
+
+  section#about {
+    contain-intrinsic-size: auto 2400px;
+  }
+
+  section#experience {
+    contain-intrinsic-size: auto 1350px;
+  }
+
+  section#skills {
+    contain-intrinsic-size: auto 960px;
+  }
+
+  section#projects {
+    contain-intrinsic-size: auto 1150px;
+  }
+
+  section#education {
+    contain-intrinsic-size: auto 520px;
+  }
+
+  section#contact {
+    contain-intrinsic-size: auto 840px;
   }
 
   h1,
@@ -189,15 +213,22 @@
   }
 }
 
-/* Pause decorative CSS keyframe loops whenever their host section is offscreen */
+/* Pause decorative CSS keyframe loops & release GPU compositor hints whenever their host is offscreen */
 [data-offscreen='true'] .animate-grid-drift,
 [data-offscreen='true'] .animate-float-slow,
 [data-offscreen='true'] .animate-float-delayed,
 [data-offscreen='true'] .animate-pulse-soft,
 [data-offscreen='true'] .animate-scroll-bounce,
 [data-offscreen='true'] .hero-orb,
-[data-offscreen='true'] .hero-sheen {
+[data-offscreen='true'] .hero-sheen,
+[data-offscreen='true'] .hero-grid-beam-h,
+[data-offscreen='true'] .hero-grid-beam-v,
+[data-offscreen='true'] .about-ambient-orb,
+[data-offscreen='true'] .section-ambient-orb,
+[data-offscreen='true'] .beacon-orbit-slow,
+[data-offscreen='true'] .beacon-orbit-reverse {
   animation-play-state: paused !important;
+  will-change: auto !important;
 }
 
 /* Theme-aware subtle custom scrollbar */

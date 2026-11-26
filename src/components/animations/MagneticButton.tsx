@@ -15,6 +15,7 @@ export function MagneticButton({
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const rectRef = useRef<DOMRect | null>(null);
+  const rectScrollYRef = useRef<number>(0);
   const rafRef = useRef<number>(0);
   const pointerRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const reducedMotion = useReducedMotion();
@@ -36,6 +37,7 @@ export function MagneticButton({
   const handleMouseEnter = () => {
     if (!enabled || !ref.current) return;
     rectRef.current = ref.current.getBoundingClientRect();
+    rectScrollYRef.current = window.scrollY;
   };
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
@@ -48,7 +50,11 @@ export function MagneticButton({
       rafRef.current = 0;
       const el = ref.current;
       if (!el) return;
-      const rect = rectRef.current ?? el.getBoundingClientRect();
+      if (!rectRef.current || rectScrollYRef.current !== window.scrollY) {
+        rectRef.current = el.getBoundingClientRect();
+        rectScrollYRef.current = window.scrollY;
+      }
+      const rect = rectRef.current;
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       x.set((pointerRef.current.x - centerX) * strength);

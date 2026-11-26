@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react';
 import { NAV_ITEMS, PROFILE } from '../../data/profile';
 import { Container } from './Container';
 
-export function Footer() {
-  const year = new Date().getFullYear();
+const CURRENT_YEAR = new Date().getFullYear();
 
+export const Footer = memo(function Footer() {
   return (
     <footer className="relative border-t border-[var(--border)] bg-[var(--footer-background)] py-10 sm:py-12">
       <Container>
@@ -21,7 +22,7 @@ export function Footer() {
               <span className="font-semibold tracking-tight">{PROFILE.shortName}</span>
             </a>
             <p className="text-xs text-[var(--text-muted)]">
-              &copy; {year} {PROFILE.name}. Crafted with precision &amp; performance.
+              &copy; {CURRENT_YEAR} {PROFILE.name}. Crafted with precision &amp; performance.
             </p>
           </div>
 
@@ -45,7 +46,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn profile"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--border-accent)] hover:text-emerald-700 dark:hover:text-emerald-300"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition-[transform,color,border-color] duration-200 hover:-translate-y-0.5 hover:border-[var(--border-accent)] hover:text-emerald-700 dark:hover:text-emerald-300"
             >
               <Linkedin className="h-4 w-4" />
             </a>
@@ -54,14 +55,14 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub profile"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--border-accent)] hover:text-emerald-700 dark:hover:text-emerald-300"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition-[transform,color,border-color] duration-200 hover:-translate-y-0.5 hover:border-[var(--border-accent)] hover:text-emerald-700 dark:hover:text-emerald-300"
             >
               <Github className="h-4 w-4" />
             </a>
             <a
               href={`mailto:${PROFILE.email}`}
               aria-label="Email Ritik Kumar Sahoo"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--border-accent)] hover:text-emerald-700 dark:hover:text-emerald-300"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition-[transform,color,border-color] duration-200 hover:-translate-y-0.5 hover:border-[var(--border-accent)] hover:text-emerald-700 dark:hover:text-emerald-300"
             >
               <Mail className="h-4 w-4" />
             </a>
@@ -78,4 +79,4 @@ export function Footer() {
       </Container>
     </footer>
   );
-}
+});

@@ -235,11 +235,7 @@ export function Navbar() {
       </a>
 
       <Container>
-        <div
-          className={`flex items-center justify-between gap-3 transition-[height] duration-300 ${
-            scrolled ? 'h-15 sm:h-16 lg:h-[66px]' : 'h-16 sm:h-[72px] lg:h-[76px]'
-          }`}
-        >
+        <div className="flex h-16 items-center justify-between gap-3 sm:h-[72px] lg:h-[74px]">
           {/* Brand */}
           <a
             href="#home"

@@ -55,9 +55,25 @@ export default defineConfig({
     target: 'es2020',
     rollupOptions: {
       output: {
-        manualChunks: {
-          motion: ['framer-motion'],
-          icons: ['lucide-react'],
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined;
+          if (
+            id.includes('/react/') ||
+            id.includes('\\react\\') ||
+            id.includes('/react-dom/') ||
+            id.includes('\\react-dom\\') ||
+            id.includes('/scheduler/') ||
+            id.includes('\\scheduler\\')
+          ) {
+            return 'react-vendor';
+          }
+          if (id.includes('framer-motion') || id.includes('motion-dom') || id.includes('motion-utils')) {
+            return 'motion';
+          }
+          if (id.includes('lucide-react')) {
+            return 'icons';
+          }
+          return undefined;
         },
       },
     },

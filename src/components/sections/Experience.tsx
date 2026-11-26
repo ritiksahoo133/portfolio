@@ -8,6 +8,7 @@ import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Badge } from '../common/Badge';
 import { Reveal } from '../animations/Reveal';
+import { SectionBackdrop } from '../animations/SectionBackdrop';
 import { SpotlightCard } from '../animations/SpotlightCard';
 
 export const Experience = memo(function Experience() {
@@ -20,7 +21,7 @@ export const Experience = memo(function Experience() {
   const reducedMotion = useReducedMotion();
   const finePointer = useFinePointer();
 
-  // Lightweight GPU scaleY progress spine active ONLY while Experience is in view (0 GSAP / 0 ScrollTrigger)
+  // Zero-reflow GPU scaleY progress spine: caches geometry on resize/expand, pure arithmetic on scroll
   useEffect(() => {
     const timeline = timelineRef.current;
     const progressEl = progressBarRef.current;
@@ -33,14 +34,22 @@ export const Experience = memo(function Experience() {
 
     let inView = false;
     let rafId = 0;
+    let cachedDocTop = 0;
+    let cachedHeight = 1;
+    let cachedViewportH = window.innerHeight || 1;
+
+    const measureGeometry = () => {
+      const rect = timeline.getBoundingClientRect();
+      cachedDocTop = rect.top + window.scrollY;
+      cachedHeight = Math.max(1, rect.height);
+      cachedViewportH = window.innerHeight || 1;
+    };
 
     const updateProgress = () => {
       rafId = 0;
-      const rect = timeline.getBoundingClientRect();
-      const viewportH = window.innerHeight || 1;
-      const start = viewportH * 0.76;
-      const total = Math.max(1, rect.height);
-      const raw = (start - rect.top) / total;
+      const topInViewport = cachedDocTop - window.scrollY;
+      const start = cachedViewportH * 0.76;
+      const raw = (start - topInViewport) / cachedHeight;
       const clamped = Math.min(1, Math.max(0, raw));
       progressEl.style.transform = `scaleY(${clamped})`;
     };
@@ -51,23 +60,39 @@ export const Experience = memo(function Experience() {
       }
     };
 
+    const onResize = () => {
+      measureGeometry();
+      schedule();
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         inView = Boolean(entries[0]?.isIntersecting);
-        if (inView) schedule();
+        if (inView) {
+          measureGeometry();
+          schedule();
+        }
       },
       { rootMargin: '120px 0px' }
     );
 
     observer.observe(timeline);
+    measureGeometry();
     updateProgress();
     window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(onResize);
+      resizeObserver.observe(timeline);
+    }
 
     return () => {
       observer.disconnect();
+      resizeObserver?.disconnect();
       window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      window.removeEventListener('resize', onResize);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [reducedMotion, finePointer, expandedIds]);
@@ -87,9 +112,10 @@ export const Experience = memo(function Experience() {
   return (
     <section
       id="experience"
-      className="relative border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
+      className="section-divider relative overflow-x-clip border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
     >
-      <Container>
+      <SectionBackdrop variant="meridian" />
+      <Container className="relative z-10">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <SectionHeading
             chapter="02"

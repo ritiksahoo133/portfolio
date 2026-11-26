@@ -14,6 +14,7 @@ import { SKILL_CATEGORIES, type SkillCategory } from '../../data/skills';
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Reveal } from '../animations/Reveal';
+import { SectionBackdrop } from '../animations/SectionBackdrop';
 import { SpotlightCard } from '../animations/SpotlightCard';
 import { TiltCard } from '../animations/TiltCard';
 
@@ -54,9 +55,10 @@ export const Skills = memo(function Skills() {
   return (
     <section
       id="skills"
-      className="relative border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
+      className="section-divider relative overflow-x-clip border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
     >
-      <Container>
+      <SectionBackdrop variant="prism" />
+      <Container className="relative z-10">
         <SectionHeading
           chapter="03"
           eyebrow="Technical Skills"
@@ -115,7 +117,7 @@ export const Skills = memo(function Skills() {
               <>
                 <div>
                   <div className="mb-4 flex items-center justify-between gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] text-emerald-700 transition-all duration-200 group-hover:scale-105 group-hover:-rotate-3 group-hover:border-emerald-600/40 group-hover:bg-emerald-500/12 dark:border-slate-700/80 dark:bg-slate-900/90 dark:text-emerald-400 dark:group-hover:border-emerald-500/40">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] text-emerald-700 transition-[transform,color,background-color,border-color] duration-200 group-hover:scale-105 group-hover:-rotate-3 group-hover:border-emerald-600/40 group-hover:bg-emerald-500/12 dark:border-slate-700/80 dark:bg-slate-900/90 dark:text-emerald-400 dark:group-hover:border-emerald-500/40">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="flex items-center gap-2 font-mono-tech text-[11px] text-[var(--text-muted)]">
@@ -137,7 +139,7 @@ export const Skills = memo(function Skills() {
                   {category.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-lg border border-[var(--border)] bg-[var(--surface-elevated)] px-2.5 py-1.5 font-mono-tech text-xs text-[var(--text-primary)] transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-600/45 hover:bg-emerald-500/10 hover:text-emerald-800 sm:px-3 dark:border-slate-800 dark:bg-slate-950/65 dark:text-slate-200 dark:hover:border-emerald-400/45 dark:hover:text-emerald-200"
+                      className="rounded-lg border border-[var(--border)] bg-[var(--surface-elevated)] px-2.5 py-1.5 font-mono-tech text-xs text-[var(--text-primary)] transition-[transform,color,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:border-emerald-600/45 hover:bg-emerald-500/10 hover:text-emerald-800 sm:px-3 dark:border-slate-800 dark:bg-slate-950/65 dark:text-slate-200 dark:hover:border-emerald-400/45 dark:hover:text-emerald-200"
                     >
                       {skill}
                     </span>

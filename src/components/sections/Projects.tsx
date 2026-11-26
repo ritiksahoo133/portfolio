@@ -12,12 +12,14 @@ import {
   X,
 } from 'lucide-react';
 import { PROJECTS, type ProjectItem } from '../../data/projects';
+import { useOffscreenPause } from '../../hooks/useOffscreenPause';
 import { EASE_EDITORIAL } from '../../lib/motion';
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { Reveal } from '../animations/Reveal';
+import { SectionBackdrop } from '../animations/SectionBackdrop';
 import { TiltCard } from '../animations/TiltCard';
 
 function ProjectVisual({
@@ -206,19 +208,7 @@ export const Projects = memo(function Projects() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const inView = Boolean(entries[0]?.isIntersecting);
-        el.setAttribute('data-offscreen', inView ? 'false' : 'true');
-      },
-      { rootMargin: '120px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  useOffscreenPause(sectionRef);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -233,9 +223,10 @@ export const Projects = memo(function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
+      className="section-divider relative overflow-x-clip border-t border-[var(--border)] py-16 sm:py-24 lg:py-28"
     >
-      <Container>
+      <SectionBackdrop variant="blueprint" />
+      <Container className="relative z-10">
         <SectionHeading
           chapter="04"
           eyebrow="Featured Projects"
