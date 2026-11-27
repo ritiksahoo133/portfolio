@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react';
 import { PROJECTS, type ProjectItem } from '../../data/projects';
 import { useOffscreenPause } from '../../hooks/useOffscreenPause';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { EASE_EDITORIAL } from '../../lib/motion';
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
@@ -207,16 +209,24 @@ function ProjectVisual({
 export const Projects = memo(function Projects() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useOffscreenPause(sectionRef);
 
   useEffect(() => {
     if (!selectedProject) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedProject(null);
     };
     window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
   }, [selectedProject]);
 
   return (
@@ -337,108 +347,112 @@ export const Projects = memo(function Projects() {
         </div>
       </Container>
 
-      {/* Accessible Project Detail Modal (scrollable on small/landscape screens) */}
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="project-modal-title"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--modal-backdrop)] p-3 backdrop-blur-xs sm:p-4"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 12 }}
-              transition={{ duration: 0.24, ease: EASE_EDITORIAL }}
-              onClick={(e) => e.stopPropagation()}
-              className="max-h-[90dvh] w-full max-w-xl overflow-y-auto rounded-2xl border border-[var(--border)] bg-[var(--background-secondary)] p-5 shadow-2xl sm:p-7"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="font-mono-tech text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                    {selectedProject.date}
-                  </p>
-                  <h3
-                    id="project-modal-title"
-                    className="mt-1 text-xl font-bold text-[var(--text-primary)] sm:text-2xl"
-                  >
-                    {selectedProject.title}
-                  </h3>
-                  <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                    {selectedProject.tagline}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedProject(null)}
-                  aria-label="Close project details"
-                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] text-[var(--text-secondary)] transition-colors hover:border-[var(--border-accent)] hover:text-[var(--text-primary)] cursor-pointer"
+      {/* Accessible Project Detail Modal rendered via Portal to escape section layout containment & stacking context */}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <AnimatePresence>
+            {selectedProject && (
+              <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="project-modal-title"
+                initial={reducedMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reducedMotion ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setSelectedProject(null)}
+                className="fixed inset-0 z-[70] flex items-center justify-center bg-[var(--modal-backdrop)] p-3 backdrop-blur-xs sm:p-4"
+              >
+                <motion.div
+                  initial={reducedMotion ? false : { opacity: 0, scale: 0.96, y: 12 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={reducedMotion ? undefined : { opacity: 0, scale: 0.96, y: 12 }}
+                  transition={{ duration: 0.24, ease: EASE_EDITORIAL }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="max-h-[90dvh] w-full max-w-xl overflow-y-auto rounded-2xl border border-[var(--border)] bg-[var(--background-secondary)] p-5 shadow-2xl sm:p-7"
                 >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-
-              <div className="mt-5">
-                <ProjectVisual type={selectedProject.visualType} />
-              </div>
-
-              <div className="mt-5">
-                <p className="font-mono-tech text-[11px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Key Capabilities
-                </p>
-                <ul className="mt-3 space-y-2.5">
-                  {selectedProject.highlights.map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-start gap-2.5 text-sm leading-relaxed text-[var(--text-secondary)]"
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="font-mono-tech text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                        {selectedProject.date}
+                      </p>
+                      <h3
+                        id="project-modal-title"
+                        className="mt-1 text-xl font-bold text-[var(--text-primary)] sm:text-2xl"
+                      >
+                        {selectedProject.title}
+                      </h3>
+                      <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                        {selectedProject.tagline}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProject(null)}
+                      aria-label="Close project details"
+                      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] text-[var(--text-secondary)] transition-colors hover:border-[var(--border-accent)] hover:text-[var(--text-primary)] cursor-pointer"
                     >
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600 dark:bg-emerald-400" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {selectedProject.technologies.map((tech) => (
-                  <Badge key={tech} variant="emerald">
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
+                  <div className="mt-5">
+                    <ProjectVisual type={selectedProject.visualType} />
+                  </div>
 
-              <div className="mt-6 flex flex-col-reverse gap-2.5 border-t border-[var(--border)] pt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
-                <Button
-                  variant="ghost"
-                  size="md"
-                  className="w-full sm:w-auto"
-                  onClick={() => setSelectedProject(null)}
-                >
-                  Close
-                </Button>
-                <Button
-                  href={selectedProject.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="primary"
-                  size="md"
-                  className="group/modal w-full sm:w-auto"
-                >
-                  <Github className="h-4 w-4" />
-                  <span>Open {selectedProject.githubLabel}</span>
-                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/modal:-translate-y-0.5 group-hover/modal:translate-x-0.5" />
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
+                  <div className="mt-5">
+                    <p className="font-mono-tech text-[11px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                      Key Capabilities
+                    </p>
+                    <ul className="mt-3 space-y-2.5">
+                      {selectedProject.highlights.map((item, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2.5 text-sm leading-relaxed text-[var(--text-secondary)]"
+                        >
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {selectedProject.technologies.map((tech) => (
+                      <Badge key={tech} variant="emerald">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 flex flex-col-reverse gap-2.5 border-t border-[var(--border)] pt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      className="w-full sm:w-auto"
+                      onClick={() => setSelectedProject(null)}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      href={selectedProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="primary"
+                      size="md"
+                      className="group/modal w-full sm:w-auto"
+                    >
+                      <Github className="h-4 w-4" />
+                      <span>Open {selectedProject.githubLabel}</span>
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/modal:-translate-y-0.5 group-hover/modal:translate-x-0.5" />
+                    </Button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </section>
   );
 });
